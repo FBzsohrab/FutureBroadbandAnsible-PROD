@@ -1,5 +1,5 @@
 ---
-- hosts: ER1
+- hosts: all
 - tasks:
   - name: show ip bgp summary
     shell:
