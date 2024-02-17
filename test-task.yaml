@@ -1,6 +1,6 @@
 ---
 - hosts: ER1
-  - tasks:
-    - name: show ip bgp summary
-      shell:
-        show ip bgp summary
+- tasks:
+  - name: show ip bgp summary
+    shell:
+      show ip bgp summary
