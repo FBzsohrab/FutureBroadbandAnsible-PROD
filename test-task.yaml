@@ -3,4 +3,5 @@
 
 - tasks:
   - name: show ip bgp summary
-  show ip bgp summary
+  - shell:
+      "show ip bgp summary"
