@@ -1,7 +1,6 @@
 ---
 - hosts: all
   remote_user: zsohrab
-  remote_password: FutureBroadbandAS400497
   tasks:
   - name: summary
     shell:
