@@ -1,6 +1,6 @@
 ---
 - hosts: all
 
-tasks:
+- tasks:
   - name: show ip bgp summary
   show ip bgp summary
