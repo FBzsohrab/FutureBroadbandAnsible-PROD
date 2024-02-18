@@ -1,9 +1,11 @@
 ---
 - hosts: all
-  remote_user: zsohrab
+  #remote_user: zsohrab
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
       show ip bgp summary
   vars:
+    ansible_ssh_pass: FutureBroadbandAS400497
+    ansible_user: zsohrab
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
