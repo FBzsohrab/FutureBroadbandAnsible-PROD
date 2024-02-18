@@ -1,7 +1,6 @@
 ---
 - hosts: all
   remote_user: zsohrab
-  connection_password_file: /test.txt
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
