@@ -1,6 +1,7 @@
 ---
 - hosts: all
   remote_user: zsohrab
+  ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
