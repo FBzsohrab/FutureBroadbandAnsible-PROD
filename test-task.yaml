@@ -4,4 +4,4 @@
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
-      ping 1.1.1.1
+      show ip bgp summary
