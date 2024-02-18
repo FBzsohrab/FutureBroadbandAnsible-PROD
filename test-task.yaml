@@ -1,7 +1,7 @@
 ---
 - hosts: all
-  remote_user: zsohrab
+  remote_user: admin
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
-      show ip bgp summary
+      ping 1.1.1.1
