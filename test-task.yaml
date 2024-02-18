@@ -1,7 +1,6 @@
 ---
 - hosts: all
   remote_user: zsohrab
-  passwd: FutureBroadbandAS400497
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
