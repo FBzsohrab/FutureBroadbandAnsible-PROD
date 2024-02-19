@@ -4,7 +4,7 @@
   tasks:
   - name: Show BGP Summary to Demo Ansible
     shell:
-      show ip bgp summary
+      cmd: show ip bgp summary
   vars:
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_user: zsohrab
