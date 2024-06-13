@@ -8,4 +8,4 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
   tasks:
     - name: Run a command on LiteBeam
-      ansible.builtin.shell: "echo 'Successfully connected to {{ inventory_hostname }}'"
+      ansible.builtin.shell: "ping -c 4 1.1.1.1"
