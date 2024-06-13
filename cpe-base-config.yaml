@@ -1,5 +1,5 @@
 ---
-- name: Provision New CPE Inventory
+- name: Provision CPE Base Configuration
   hosts: litebeam_hosts
   gather_facts: no
   vars:
@@ -8,5 +8,9 @@
     ansible_ssh_pass: ubnt
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
   tasks:
-    - name: Run ping command
-      raw: ping -c 4 1.1.1.1
+    - name: Modify the Wireless PSK (wpasupplicant.profile.1.network.1.psk) setting
+      #become: yes
+      replace:
+        path: /tmp/system.cfg
+        regexp: '^(wpasupplicant.profile.1.network.1.psk=).*$'
+        replace: '\g<1>FutureBroadbandAS400497'
