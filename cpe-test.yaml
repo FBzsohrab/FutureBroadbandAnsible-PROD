@@ -10,7 +10,7 @@
   tasks:
     - name: Modify configuration file using sed
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=OnePassToRuleThemAll/' /tmp/system.cfg
-    - name: Save config
-      raw: iwconfig commit
+#    - name: Save config
+#      raw: save
     - name: Reboot CPE
       raw: reboot
