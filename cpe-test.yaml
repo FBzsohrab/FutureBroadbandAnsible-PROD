@@ -11,6 +11,6 @@
     - name: Modify configuration file using sed
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=OnePassToRuleThemAll/' /tmp/system.cfg
     - name: Save config
-      raw: /usr/etc/rc.d/rc.softrestart save
+      raw: iwconfig commit
     - name: Reboot CPE
       raw: reboot
