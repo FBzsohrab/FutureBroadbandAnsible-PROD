@@ -10,6 +10,8 @@
   tasks:
     - name: Modify the WPA Pre-Shared Key
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
+    - name: Modify aaa.1.wpa.psk=
+      raw: sed -i 's|^aaa.1.wpa.psk=.*|aaa.1.wpa.psk=FutureBroadbandAS400497|' /tmp/system.cfg
     - name: Modify the UNMS key
       raw: sed -i 's|^unms.uri=.*|unms.uri=wss://portal.futurebroadband.net:443+gw2qBhwpdlJd1HKqPhX13PWn90Ld4kGt1trLyK5KknYAAAAA+allowUntrustedCertificate|' /tmp/system.cfg
     - name: Enable UNMS
