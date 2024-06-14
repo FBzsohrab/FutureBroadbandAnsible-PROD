@@ -17,7 +17,9 @@
     - name: Enable UNMS
       raw: sed -i 's|^unms.status=.*|unms.status=enabled|' /tmp/system.cfg
     - name: Change Radio Antenna Gain
-      raw: sed -i 's|^radio.1.antenna.gain=.*|radio.1.antenna.gain=22|' /tmp/system.cfg
+      raw: sed -i 's|^radio.1.antenna.gain=.*|radio.1.antenna.gain=23|' /tmp/system.cfg
+    - name: Change Radio TX Power
+      raw: sed -i 's|^radio.1.txpower=.*|radio.1.txpower=22|' /tmp/system.cfg
 #    - name: Save config
 #      raw: save
 #    - name: Reboot CPE
