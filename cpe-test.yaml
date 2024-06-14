@@ -8,10 +8,8 @@
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
   tasks:
-    - name: Ping Cloudflare Public DNS
-      raw: ping -c 4 1.1.1.1
-#    - name: Modify configuration file using sed
-#      raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
+    - name: Modify configuration file using sed
+      raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
 #    - name: Save config
 #      raw: save
 #    - name: Reboot CPE
