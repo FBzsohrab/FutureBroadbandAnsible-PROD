@@ -27,6 +27,12 @@
       raw: sed -i 's|^resolv.host.1.name=.*|resolv.host.1.name={{ cpe_hostname }}|' /tmp/system.cfg
     - name: Set the SSID for the CPE to Connect To
       raw: sed -i 's|^wireless.1.ssid=.*|wireless.1.ssid={{ WIRELESS_SSID }}|' /tmp/system.cfg
+    - name: Set the NTP server
+      raw: sed -i 's|^ntpclient.1.server=.*|ntpclient.1.server=0.ubnt.pool.ntp.org|' /tmp/system.cfg
+    - name: Enable ntpclient.1.status
+      raw: sed -i 's|^ntpclient.1.status=.*|ntpclient.1.status=enabled|' /tmp/system.cfg
+    - name: Enable ntpclient.status
+      raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
 #    - name: Save config
 #      raw: save
 #    - name: Reboot CPE
