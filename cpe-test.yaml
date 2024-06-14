@@ -27,7 +27,7 @@
       raw: sed -i 's|^resolv.host.1.name=.*|resolv.host.1.name={{ cpe_hostname }}|' /tmp/system.cfg
     - name: Set the SSID for the CPE to Connect To
       raw: sed -i 's|^wireless.1.ssid=.*|wireless.1.ssid={{ WIRELESS_SSID }}|' /tmp/system.cfg
-    - name: Save config
-      raw: save
+#    - name: Save config
+#      raw: save
 #    - name: Reboot CPE
 #      raw: reboot
