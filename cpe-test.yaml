@@ -13,7 +13,7 @@
     - name: Modify the UNMS key
       raw: sed -i 's|^unms.uri=.*|unms.uri=wss://portal.futurebroadband.net:443+gw2qBhwpdlJd1HKqPhX13PWn90Ld4kGt1trLyK5KknYAAAAA+allowUntrustedCertificate|' /tmp/system.cfg
     - name: Enable UNMS
-      raw: sed -i 's|^unms.status=.*|unms.uri=enabled|' /tmp/system.cfg
+      raw: sed -i 's|^unms.status=.*|unms.status=enabled|' /tmp/system.cfg
 #    - name: Save config
 #      raw: save
 #    - name: Reboot CPE
