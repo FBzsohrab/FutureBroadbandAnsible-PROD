@@ -7,6 +7,7 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    cpe_hostname: FirstName-LastName-CPE
   tasks:
     - name: Modify the WPA Pre-Shared Key
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
@@ -19,7 +20,9 @@
     - name: Change Radio Antenna Gain
       raw: sed -i 's|^radio.1.antenna.gain=.*|radio.1.antenna.gain=23|' /tmp/system.cfg
     - name: Change Radio TX Power
-      raw: sed -i 's|^radio.1.txpower=.*|radio.1.txpower=22|' /tmp/system.cfg
+      raw: sed -i 's|^radio.1.txpower=.*|radio.1.txpower=24|' /tmp/system.cfg
+    - name: Change CPE Hostname
+      raw: sed -i 's|^resolv.host.1.name=.*|resolv.host.1.name={{ cpe_hostname }}|' /tmp/system.cfg
 #    - name: Save config
 #      raw: save
 #    - name: Reboot CPE
