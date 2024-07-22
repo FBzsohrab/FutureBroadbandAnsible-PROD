@@ -33,7 +33,7 @@
       raw: sed -i 's|^ntpclient.1.status=.*|ntpclient.1.status=enabled|' /tmp/system.cfg
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
-#    - name: Save config
-#      raw: save
-#    - name: Reboot CPE
-#      raw: reboot
+    - name: Save config
+      raw: cfgmtd -w -p /tmp/system.cfg
+    - name: Reboot CPE
+      raw: reboot
