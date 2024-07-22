@@ -34,6 +34,6 @@
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
     - name: Save config
-      raw: cfgmtd -w -p /tmp/system.cfg
+      raw: cfgmtd -w -p /etc/persistent
     - name: Reboot CPE
       raw: reboot
