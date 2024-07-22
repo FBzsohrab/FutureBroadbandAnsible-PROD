@@ -33,7 +33,16 @@
       raw: sed -i 's|^ntpclient.1.status=.*|ntpclient.1.status=enabled|' /tmp/system.cfg
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
+    - name: Verify changes in the configuration file
+      raw: grep -E 'wpasupplicant.profile.1.network.1.psk|aaa.1.wpa.psk|unms.uri|unms.status|radio.1.antenna.gain|radio.1.txpower|resolv.host.1.name|wireless.1.ssid|ntpclient.1.server|ntpclient.1.status|ntpclient.status' /tmp/system.cfg
+      register: verify_output
+
+    - name: Display verification output
+      debug:
+        msg: "{{ verify_output.stdout_lines }}"
+
     - name: Save config
       raw: cfgmtd -w -p /etc/persistent
     - name: Reboot CPE
       raw: reboot
+
