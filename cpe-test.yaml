@@ -62,8 +62,9 @@
       pause:
         seconds: 5
 
-    - name: Save config
-      raw: save
+    - name: Save the configuration
+      raw: cfgmtd -w -p /etc/
 
     - name: Reboot CPE
       raw: reboot
+
