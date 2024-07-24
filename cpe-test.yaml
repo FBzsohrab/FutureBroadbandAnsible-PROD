@@ -51,13 +51,6 @@
     - debug:
         var: config_output.stdout
 
-    - name: Initialize and create symlink to the default configuration file
-      raw: ubntconf -i /tmp/system.cfg
-      register: result_init_symlink
-
-    - debug:
-        var: result_init_symlink.stdout
-
     - name: Wait for 5 seconds
       pause:
         seconds: 5
@@ -67,4 +60,5 @@
 
     - name: Reboot CPE
       raw: reboot
+
 
