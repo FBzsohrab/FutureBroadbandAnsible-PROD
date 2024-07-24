@@ -55,8 +55,8 @@
       pause:
         seconds: 5
 
-    - name: Save config
-      raw: save
+   # - name: Save config
+  #  raw: save
 
     - name: Reboot CPE
       raw: reboot
