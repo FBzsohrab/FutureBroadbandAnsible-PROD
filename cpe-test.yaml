@@ -41,8 +41,26 @@
       debug:
         msg: "{{ verify_output.stdout_lines }}"
 
+    - name: Check if /etc/persistent directory exists
+      raw: ls -ld /etc/persistent
+      register: dir_check
+      ignore_errors: yes
+
+    - name: Display directory check output
+      debug:
+        msg: "{{ dir_check.stdout_lines }}"
+
     - name: Ensure /etc/persistent directory exists
       raw: mkdir -p /etc/persistent
+      when: dir_check.rc != 0
+
+    - name: List contents of /etc to verify creation
+      raw: ls -l /etc
+      register: list_check
+
+    - name: Display list output
+      debug:
+        msg: "{{ list_check.stdout_lines }}"
 
     - name: Save config
       raw: cfgmtd -w -p /etc/persistent
