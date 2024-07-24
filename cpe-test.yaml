@@ -1,5 +1,5 @@
 ---
-- name: SSH into Ubiquiti LiteBeam
+- name: Base CPE Configurator
   hosts: litebeam_hosts
   gather_facts: no
   vars:
