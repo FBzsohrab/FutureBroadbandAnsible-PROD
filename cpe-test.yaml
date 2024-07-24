@@ -41,8 +41,12 @@
       debug:
         msg: "{{ verify_output.stdout_lines }}"
 
+    - name: Ensure /etc/persistent directory exists
+      raw: mkdir -p /etc/persistent
+
     - name: Save config
       raw: cfgmtd -w -p /etc/persistent
+
     - name: Reboot CPE
       raw: reboot
 
