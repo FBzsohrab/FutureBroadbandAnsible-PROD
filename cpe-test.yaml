@@ -13,30 +13,50 @@
   tasks:
     - name: Modify the WPA Pre-Shared Key
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
+
     - name: Modify aaa.1.wpa.psk=
       raw: sed -i 's|^aaa.1.wpa.psk=.*|aaa.1.wpa.psk=FutureBroadbandAS400497|' /tmp/system.cfg
+
     - name: Modify the UNMS key
       raw: sed -i 's|^unms.uri=.*|unms.uri={{ UISP_Key }}|' /tmp/system.cfg
+
     - name: Enable UNMS
       raw: sed -i 's|^unms.status=.*|unms.status=enabled|' /tmp/system.cfg
+
     - name: Change Radio Antenna Gain
       raw: sed -i 's|^radio.1.antenna.gain=.*|radio.1.antenna.gain=23|' /tmp/system.cfg
+
     - name: Change Radio TX Power
       raw: sed -i 's|^radio.1.txpower=.*|radio.1.txpower=24|' /tmp/system.cfg
+
     - name: Change CPE Hostname
       raw: sed -i 's|^resolv.host.1.name=.*|resolv.host.1.name={{ cpe_hostname }}|' /tmp/system.cfg
+
     - name: Set the SSID for the CPE to Connect To
       raw: sed -i 's|^wireless.1.ssid=.*|wireless.1.ssid={{ WIRELESS_SSID }}|' /tmp/system.cfg
+
     - name: Set the NTP server
       raw: sed -i 's|^ntpclient.1.server=.*|ntpclient.1.server=0.ubnt.pool.ntp.org|' /tmp/system.cfg
+
     - name: Enable ntpclient.1.status
       raw: sed -i 's|^ntpclient.1.status=.*|ntpclient.1.status=enabled|' /tmp/system.cfg
+
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
+
+    - name: Initialize and create symlink to the default configuration file
+      raw: ubntconf -i /tmp/system.cfg
+      register: result_init_symlink
+
+    - debug:
+        var: result_init_symlink.stdout
+
     - name: Wait for 5 seconds
       pause:
         seconds: 5
+
     - name: Save config
       command: save
+
     - name: Reboot CPE
       command: reboot
