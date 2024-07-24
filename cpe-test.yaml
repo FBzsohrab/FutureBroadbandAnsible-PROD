@@ -56,7 +56,8 @@
         seconds: 5
 
     - name: Save config
-      command: save
+      raw: save
 
     - name: Reboot CPE
-      command: reboot
+      raw: reboot
+
