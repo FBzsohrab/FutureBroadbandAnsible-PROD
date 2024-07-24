@@ -33,38 +33,10 @@
       raw: sed -i 's|^ntpclient.1.status=.*|ntpclient.1.status=enabled|' /tmp/system.cfg
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
-    - name: Verify changes in the configuration file
-      raw: grep -E 'wpasupplicant.profile.1.network.1.psk|aaa.1.wpa.psk|unms.uri|unms.status|radio.1.antenna.gain|radio.1.txpower|resolv.host.1.name|wireless.1.ssid|ntpclient.1.server|ntpclient.1.status|ntpclient.status' /tmp/system.cfg
-      register: verify_output
-
-    - name: Display verification output
-      debug:
-        msg: "{{ verify_output.stdout_lines }}"
-
-    - name: Check if /etc/persistent directory exists
-      raw: ls -ld /etc/persistent
-      register: dir_check
-      ignore_errors: yes
-
-    - name: Display directory check output
-      debug:
-        msg: "{{ dir_check.stdout_lines }}"
-
-    - name: Ensure /etc/persistent directory exists
-      raw: mkdir -p /etc/persistent
-      when: dir_check.rc != 0
-
-    - name: List contents of /etc to verify creation
-      raw: ls -l /etc
-      register: list_check
-
-    - name: Display list output
-      debug:
-        msg: "{{ list_check.stdout_lines }}"
-
+    - name: Wait for 5 seconds
+      pause:
+        seconds: 5
     - name: Save config
-      raw: cfgmtd -w -p /etc/persistent
-
+      command: save
     - name: Reboot CPE
-      raw: reboot
-
+      command: reboot
