@@ -7,9 +7,9 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-    cpe_hostname: FirstName-LastName-CPE
+    cpe_hostname: Test-LastName-CPE
     UISP_Key: wss://portal.futurebroadband.net:443+gw2qBhwpdlJd1HKqPhX13PWn90Ld4kGt1trLyK5KknYAAAAA+allowUntrustedCertificate
-    WIRELESS_SSID: FB-AP-NOC-yahya
+    WIRELESS_SSID: YAHYA-WIRELESS
   tasks:
     - name: Modify the WPA Pre-Shared Key
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
