@@ -37,8 +37,6 @@
       pause:
         seconds: 5
     - name: Save config
-      ansible.builtin.command: /usr/bin/ubnt-systool -s
-      args:
-        executable: /bin/sh
+      command: save
     - name: Reboot CPE
       command: reboot
