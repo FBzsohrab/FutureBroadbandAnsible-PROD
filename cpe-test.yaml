@@ -9,7 +9,7 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     cpe_hostname: FirstName-LastName-CPE
     UISP_Key: wss://portal.futurebroadband.net:443+gw2qBhwpdlJd1HKqPhX13PWn90Ld4kGt1trLyK5KknYAAAAA+allowUntrustedCertificate
-    WIRELESS_SSID: FB-AP-NOC-Yahya
+    WIRELESS_SSID: FB-AP-NOC-NE
   tasks:
     - name: Modify the WPA Pre-Shared Key
       raw: sed -i 's/^wpasupplicant.profile.1.network.1.psk=.*/wpasupplicant.profile.1.network.1.psk=FutureBroadbandAS400497/' /tmp/system.cfg
@@ -44,6 +44,13 @@
     - name: Enable ntpclient.status
       raw: sed -i 's|^ntpclient.status=.*|ntpclient.status=enabled|' /tmp/system.cfg
 
+    - name: Display the modified configuration file
+      raw: cat /tmp/system.cfg
+      register: config_output
+
+    - debug:
+        var: config_output.stdout
+
     - name: Initialize and create symlink to the default configuration file
       raw: ubntconf -i /tmp/system.cfg
       register: result_init_symlink
@@ -55,9 +62,8 @@
       pause:
         seconds: 5
 
-   # - name: Save config
-  #  raw: save
+    - name: Save config
+      raw: save
 
     - name: Reboot CPE
       raw: reboot
-
