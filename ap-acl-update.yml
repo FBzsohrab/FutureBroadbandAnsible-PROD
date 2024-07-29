@@ -8,7 +8,10 @@
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
     default_system_cfg_path: /path/to/default/system.cfg  # Update this path to your local default system.cfg
-  
+  pre_tasks:
+    - name: Test SSH connection
+      wait_for_connection:
+        timeout: 60
   tasks:
     - name: Extract MAC address
       raw: "ifconfig eth0 | grep 'HWaddr' | awk '{print $5}'"
@@ -18,14 +21,10 @@
       debug:
         msg: "MAC address is {{ mac_address_output.stdout.strip() }}"
 
-    - name: Read default system.cfg
-      slurp:
-        src: "{{ default_system_cfg_path }}"
-      register: default_system_cfg
-
-    - name: Decode default system.cfg
-      set_fact:
-        default_system_cfg_decoded: "{{ default_system_cfg.content | b64decode }}"
+    - name: Read default system.cfg using raw command
+      raw: "cat {{ default_system_cfg_path }}"
+      register: default_system_cfg_output
+      delegate_to: localhost
 
     - name: Generate new MAC ACL entry
       set_fact:
@@ -37,7 +36,7 @@
 
     - name: Append new MAC ACL entry to system.cfg content
       set_fact:
-        updated_system_cfg: "{{ default_system_cfg_decoded + '\n' + new_mac_acl_entry }}"
+        updated_system_cfg: "{{ default_system_cfg_output.stdout + '\n' + new_mac_acl_entry }}"
 
     - name: Write updated system.cfg to a temporary file
       copy:
