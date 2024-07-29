@@ -1,3 +1,4 @@
+
 ---
 - name: Configure Ubiquiti LiteBeam with MAC ACL
   hosts: litebeam_hosts
@@ -35,16 +36,21 @@
         updated_system_cfg: "{{ default_system_cfg_output.stdout + '\n' + new_mac_acl_entry }}"
 
     - name: Write updated system.cfg to a temporary file on localhost
-      local_action: copy content="{{ updated_system_cfg }}" dest="/tmp/updated_system.cfg"
+      local_action:
+        module: copy
+        content: "{{ updated_system_cfg }}"
+        dest: /tmp/updated_system.cfg
 
     - name: Upload updated system.cfg to device
       raw: |
-        echo "{{ updated_system_cfg }}" > /tmp/system.cfg
+        cat > /tmp/system.cfg << 'EOF'
+        {{ updated_system_cfg }}
+        EOF
 
     - name: Apply the updated system.cfg
       raw: "cfgmtd -w -p /etc/"
 
-    - name: Save the configuration to persistent storage
+    - name: Save the configuration to persistent storage and reboot
       raw: "cfgmtd -w -p /etc/ && reboot"
 
     # Uncomment the following lines if you do not want to reboot immediately
