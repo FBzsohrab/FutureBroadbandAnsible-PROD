@@ -1,4 +1,5 @@
 ---
+- name: ---
 - name: Configure Ubiquiti LiteBeam with MAC ACL
   hosts: litebeam_hosts
   gather_facts: no
@@ -7,9 +8,20 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-    default_system_cfg_path: /tmp/system.cfg  # Update this path to your local default system.cfg
-
+    default_system_cfg_path: /tmp/system.cfg  # Ensure this file exists on your local machine
+  
   tasks:
+    - name: Check if default system.cfg exists on localhost
+      stat:
+        path: "{{ default_system_cfg_path }}"
+      delegate_to: localhost
+      register: default_system_cfg_stat
+
+    - name: Fail if default system.cfg does not exist on localhost
+      fail:
+        msg: "The default system.cfg file does not exist at {{ default_system_cfg_path }} on localhost."
+      when: not default_system_cfg_stat.stat.exists
+
     - name: Extract MAC address
       raw: "ifconfig eth0 | grep 'HWaddr' | awk '{print $5}'"
       register: mac_address_output
@@ -18,10 +30,9 @@
       debug:
         msg: "MAC address is {{ mac_address_output.stdout.strip() }}"
 
-    - name: Read default system.cfg using raw command
-      raw: "cat {{ default_system_cfg_path }}"
+    - name: Read default system.cfg using raw command on localhost
+      local_action: command cat {{ default_system_cfg_path }}
       register: default_system_cfg_output
-      delegate_to: localhost
 
     - name: Generate new MAC ACL entry
       set_fact:
@@ -35,15 +46,15 @@
       set_fact:
         updated_system_cfg: "{{ default_system_cfg_output.stdout + '\n' + new_mac_acl_entry }}"
 
-    - name: Write updated system.cfg to a temporary file
+    - name: Write updated system.cfg to a temporary file on localhost
       copy:
         content: "{{ updated_system_cfg }}"
-        dest: /tmp/system.cfg
+        dest: /tmp/system.cfg.updated
       delegate_to: localhost
 
     - name: Upload updated system.cfg to device
       copy:
-        src: /tmp/system.cfg
+        src: /tmp/system.cfg.updated
         dest: /tmp/system.cfg
 
     - name: Apply the updated system.cfg
