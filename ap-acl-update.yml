@@ -34,16 +34,12 @@
       set_fact:
         updated_system_cfg: "{{ default_system_cfg_output.stdout + '\n' + new_mac_acl_entry }}"
 
-    - name: Write updated system.cfg to a temporary file
-      copy:
-        content: "{{ updated_system_cfg }}"
-        dest: /tmp/system.cfg
-      delegate_to: localhost
+    - name: Write updated system.cfg to a temporary file on localhost
+      local_action: copy content="{{ updated_system_cfg }}" dest="/tmp/updated_system.cfg"
 
     - name: Upload updated system.cfg to device
-      copy:
-        src: /tmp/system.cfg
-        dest: /tmp/system.cfg
+      raw: |
+        echo "{{ updated_system_cfg }}" > /tmp/system.cfg
 
     - name: Apply the updated system.cfg
       raw: "cfgmtd -w -p /etc/"
