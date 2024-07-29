@@ -44,9 +44,9 @@
     - name: Apply the updated system.cfg
       raw: "cfgmtd -w -p /etc/"
 
-    - name: Save the configuration
-      raw: "save"
+    - name: Save the configuration to persistent storage
+      raw: "cfgmtd -w -p /etc/ && reboot"
 
-    # Uncomment the following lines if a reboot is required
+    # Uncomment the following lines if you do not want to reboot immediately
     # - name: Reboot device
     #   raw: "reboot"
