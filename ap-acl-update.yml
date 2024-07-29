@@ -7,7 +7,7 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-    default_system_cfg_path: /path/to/default/system.cfg  # Update this path to your local default system.cfg
+    default_system_cfg_path: /tmp/system.cfg  # Update this path as it is on the device
   
   tasks:
     - name: Extract MAC address
@@ -21,7 +21,6 @@
     - name: Read default system.cfg using raw command
       raw: "cat {{ default_system_cfg_path }}"
       register: default_system_cfg_output
-      delegate_to: localhost
 
     - name: Generate new MAC ACL entry
       set_fact:
