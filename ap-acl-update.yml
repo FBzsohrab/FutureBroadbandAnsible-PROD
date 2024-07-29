@@ -7,11 +7,8 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
-    default_system_cfg_path: /path/to/default/system.cfg  # Update this path to your local default system.cfg
-  pre_tasks:
-    - name: Test SSH connection
-      wait_for_connection:
-        timeout: 60
+    default_system_cfg_path: /tmp/system.cfg  # Update this path to your local default system.cfg
+
   tasks:
     - name: Extract MAC address
       raw: "ifconfig eth0 | grep 'HWaddr' | awk '{print $5}'"
