@@ -1,5 +1,5 @@
 ---
-- name: Extract and Update MAC ACL
+- name: Configure Ubiquiti LiteBeam with MAC ACL
   hosts: litebeam_hosts
   gather_facts: no
   vars:
@@ -7,6 +7,11 @@
     ansible_password: FutureBroadbandAS400497
     ansible_ssh_pass: FutureBroadbandAS400497
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    default_system_cfg_path: /path/to/default/system.cfg  # Update this path to your local default system.cfg
+  pre_tasks:
+    - name: Test SSH connection
+      wait_for_connection:
+        timeout: 60
   tasks:
     - name: Extract MAC address
       raw: "ifconfig eth0 | grep 'HWaddr' | awk '{print $5}'"
@@ -16,40 +21,44 @@
       debug:
         msg: "MAC address is {{ mac_address_output.stdout.strip() }}"
 
-    - name: Ensure MAC ACL file exists
-      file:
-        path: /path/to/mac_acl.txt
-        state: touch
-      delegate_to: localhost
-
-    - name: Save MAC address to file
-      local_action:
-        module: lineinfile
-        path: /path/to/mac_acl.txt
-        line: "{{ mac_address_output.stdout.strip() }}"
-      delegate_to: localhost
-
-    - name: Read existing MAC ACL configuration
+    - name: Read default system.cfg
       slurp:
-        src: /etc/config_file_path
-      register: current_acl_config
+        src: "{{ default_system_cfg_path }}"
+      register: default_system_cfg
 
-    - name: Parse existing MAC addresses
+    - name: Decode default system.cfg
       set_fact:
-        existing_mac_entries: "{{ current_acl_config.content | b64decode | regex_findall('wireless.1.mac_acl.[0-9]+.mac=([0-9A-Fa-f:]+)') }}"
+        default_system_cfg_decoded: "{{ default_system_cfg.content | b64decode }}"
 
-    - name: Generate new ACL entry
+    - name: Generate new MAC ACL entry
       set_fact:
-        acl_index: "{{ existing_mac_entries | length + 1 }}"
-        new_acl_entry: |
-          wireless.1.mac_acl.{{ acl_index }}.mac={{ mac_address_output.stdout.strip() }}
-          wireless.1.mac_acl.{{ acl_index }}.status=enabled
+        new_mac_acl_entry: |
+          wireless.1.mac_acl.{{ item.index }}.mac={{ item.mac }}
+          wireless.1.mac_acl.{{ item.index }}.status=enabled
+      with_items:
+        - { index: 80, mac: "{{ mac_address_output.stdout.strip() }}" }  # Update the index as per the existing number of ACL entries
 
-    - name: Update MAC ACL configuration
-      blockinfile:
-        path: /etc/config_file_path
-        insertafter: "wireless.1.mac_acl.*.status=enabled"
-        block: "{{ new_acl_entry }}"
+    - name: Append new MAC ACL entry to system.cfg content
+      set_fact:
+        updated_system_cfg: "{{ default_system_cfg_decoded + '\n' + new_mac_acl_entry }}"
 
-    - name: Save updated configuration
-      raw: "cfgmtd -w -p /etc/; reboot"
+    - name: Write updated system.cfg to a temporary file
+      copy:
+        content: "{{ updated_system_cfg }}"
+        dest: /tmp/system.cfg
+      delegate_to: localhost
+
+    - name: Upload updated system.cfg to device
+      copy:
+        src: /tmp/system.cfg
+        dest: /tmp/system.cfg
+
+    - name: Apply the updated system.cfg
+      raw: "cfgmtd -w -p /etc/"
+
+    - name: Save the configuration
+      raw: "save"
+
+    # Uncomment the following lines if a reboot is required
+    # - name: Reboot device
+    #   raw: "reboot"
