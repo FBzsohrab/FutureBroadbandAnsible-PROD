@@ -1,0 +1,35 @@
+---
+- name: Remove traffic shaping rules to un-suspend customer
+  hosts: cpe_devices
+  gather_facts: no
+  vars:
+    ansible_user: admin
+    ansible_password: FutureBroadbandAS400497
+    ansible_ssh_pass: FutureBroadbandAS400497
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+    default_system_cfg_path: /tmp/system.cfg  # Update this path as it is on the device
+  
+  tasks:
+    - name: Backup current configuration file
+      raw: cp {{ default_system_cfg_path }} {{ default_system_cfg_path }}.bak
+
+    - name: Remove traffic shaping settings from configuration file
+      raw: |
+        sed -i '/^tshaper\.1\.devname=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.output\.rate=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.output\.burst=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.output\.status=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.input\.rate=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.input\.burst=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.input\.status=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.1\.status=/d' {{ default_system_cfg_path }}
+        sed -i '/^tshaper\.status=/d' {{ default_system_cfg_path }}
+
+    - name: Apply the updated system.cfg
+      raw: "cfgmtd -w -p /etc/"
+
+    - name: Save the configuration to persistent storage
+      raw: "cfgmtd -w -p /etc/"
+
+    - name: Reboot the device
+      raw: "reboot"
