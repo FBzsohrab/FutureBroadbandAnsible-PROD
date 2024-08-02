@@ -1,6 +1,6 @@
 ---
 - name: Configure CPE with traffic shaping rules
-  hosts: cpe_devices
+  hosts: litebeam_hosts
   gather_facts: no
   vars:
     ansible_user: admin
