@@ -1,0 +1,30 @@
+---
+- name: Modify CPE configuration to set traffic shaping
+  hosts: cpe_devices
+  tasks:
+    - name: Backup current configuration file
+      raw: cp /etc/config/cpe_config.cfg /etc/config/cpe_config.cfg.bak
+
+    - name: Add traffic shaping settings to configuration file
+      raw: |
+        sed -i '/^tshaper\.1\.devname=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.output\.rate=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.output\.burst=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.output\.status=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.input\.rate=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.input\.burst=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.input\.status=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.1\.status=/d' /etc/config/cpe_config.cfg
+        sed -i '/^tshaper\.status=/d' /etc/config/cpe_config.cfg
+        echo 'tshaper.1.devname=eth0' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.output.rate=64' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.output.burst=0' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.output.status=enabled' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.input.rate=64' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.input.burst=0' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.input.status=enabled' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.1.status=enabled' >> /etc/config/cpe_config.cfg
+        echo 'tshaper.status=enabled' >> /etc/config/cpe_config.cfg
+
+    - name: Persist the changes to the configuration file
+      raw: sync
