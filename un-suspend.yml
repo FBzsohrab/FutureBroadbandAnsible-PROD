@@ -1,6 +1,6 @@
 ---
 - name: Remove traffic shaping rules to un-suspend customer
-  hosts: cpe_devices
+  hosts: litebeam_hosts
   gather_facts: no
   vars:
     ansible_user: admin
